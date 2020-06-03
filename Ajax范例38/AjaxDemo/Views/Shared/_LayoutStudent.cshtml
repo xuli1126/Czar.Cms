@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <script src="~/js/jquery-1.12.4.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    <script type="text/javascript">
+        //获取地址栏的参数值，key指的是参数的名称
+        function GetQuery(key) {
+            var search = location.search.slice(1); //得到get方式提交的查询字符串
+            var arr = search.split("&");
+            for (var i = 0; i < arr.length; i++) {
+                var ar = arr[i].split("=");
+                if (ar[0] == key) {
+                    if (unescape(ar[1]) == 'undefined') {
+                        return "";
+                    } else {
+                        return unescape(ar[1]);
+                    }
+                }
+            }
+            return "";
+        }
+    </script>
+    <style>
+        header,footer{
+            background:blue;
+            width:100%;
+            height:80px;
+        }
+        section{
+            display:flex;
+        }
+        .ulLeft{
+            flex:1;
+        }
+        .divRight{
+            flex:3;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h3>
+            欢迎使用学生管理系统,@Session["username"]
+        </h3>
+    </header>
+    <section>
+        <div id="subnav">
+            @*在A页面中直接通过动作方法控制器指定嵌入B页面内容*@
+       
+          </div>
+        <ul class="ulLeft list-group">
+            <li class="list-group-item"><a href="/Student/List">学生管理</a></li>
+            <li class="list-group-item"><a href="/Student/CountStudent">统计学生人数</a></li>
+            <li class="list-group-item"><a href="/Grade/List">年级管理</a></li>
+            <li class="list-group-item"><a>成绩管理</a></li>
+            <li class="list-group-item"><a>科目管理</a></li>
+            <li class="list-group-item"><a href="/Student/GSList">复杂学生列表页</a></li>
+        </ul>
+        <div class="divRight">
+            @RenderBody()
+        </div>
+    </section>
+    <footer class="text-center">版权所有NET38班</footer>
+</body>
+</html>

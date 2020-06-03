@@ -1,0 +1,284 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<script type="text/javascript">
+
+    //查询学生的方法
+    //pageIndex为参数，默认查询页码
+    function selectStudent(pageIndex) {
+       $.ajax({
+            //  url: '/Student/SelectStudent?pageIndex=' + pageIndex,//请求服务器的地址
+            url: '/Student/SelectStudent?rand='+Math.random(),//请求服务器的地址
+            data:{pageIndex:pageIndex},//客户端传入到服务端的数据
+            type: 'post',//请求服务器的方式post/get
+            datatype: 'json',//服务器返回的数据格式：json/text/html
+            async: true,//是否异步请求true/false
+            success: function (resultJson) {//请求成功之后的回调函数
+                $("#tbStudent").html("");
+                $("#divPage").empty();
+                //data指的是服务器返回的json/content中放入的对象
+                var html = "";
+                for (var i = 0; i < resultJson.query.length; i++) {
+                    html += "<tr>";
+                    html += "<td>" + resultJson.query[i].StudentNo + "</td>";
+                    html += "<td>" + resultJson.query[i].StudentName + "</td>";
+                    html += "<td>" + resultJson.query[i].LoginPwd + "</td>";
+                    html += "<td>" + resultJson.query[i].Phone + "</td>";
+                    html += "<td><a onclick=openModal('" + resultJson.query[i].StudentNo + "')>修改|</a><a href='/student/Add?studentNo=" + resultJson.query[i].StudentNo + "'>修改(跳转)</a><a onclick=deleteStudent('" + resultJson.query[i].StudentNo + "')>删除</a></td>";
+                    html += "</tr>";
+                }
+                $("#tbStudent").append(html);
+                $("#divPage").append("总页数：" + resultJson.pageCount);
+                $("#divPage").append("当前页：" + resultJson.pageIndex);
+                $("#divPage").append("总条数：" + resultJson.total);
+               
+                if (resultJson.pageIndex != 1) {
+                    var p = resultJson.pageIndex -1;
+                  //  alert(p);
+                    $("#divPage").append("<a href='#' onclick=selectStudent(" + p + ")>上一页</a>");
+                }
+                if (resultJson.pageCount != resultJson.pageIndex) {
+                    var p = resultJson.pageIndex + 1;
+                    //alert(p);
+                    $("#divPage").append("<a href='#' onclick=selectStudent("+p+")>下一页</a>");
+                }
+             },
+            error: function () {
+                alert("系统错误");
+            }
+       })
+      
+    }
+    //删除学生的方法
+    function deleteStudent(studentNo) {
+        //删除前先确认
+        var result = confirm("您确定要删除吗？");
+        if (result) {
+            $.ajax({
+                //  url: '/Student/SelectStudent?pageIndex=' + pageIndex,//请求服务器的地址
+                url: '/Student/DeleteStudent',//请求服务器的地址
+                //参数名与动作方法中的形参名一致，后面的为参数值
+                data: { studentNo: studentNo },//客户端传入到服务端的数据
+                type: 'post',//请求服务器的方式post/get
+                datatype: 'text',//服务器返回的数据格式：json/text/html
+                async: true,//是否异步请求true/false
+                success: function (data) {//请求成功之后的回调函数
+                    var result = parseInt(data);
+                    if (result > 0) {
+                        alert("删除成功");
+                        //删除成功，则重新查询数据
+                        selectStudent(1);
+                    } else if (result == -1) {
+                        alert("该学生存在相关的成绩数据，不能删除");
+                    } else {
+                        alert("删除失败");
+                    }
+                },
+                error: function () {
+                    alert("系统错误");
+                }
+            })
+        }
+       
+    }
+    $(function () {
+        //默认查询第一页的数据
+        selectStudent(1);
+        //绑定年级下拉框
+        BindGrade();
+        //绑定添加学生的按钮
+        $("#btnAdd").click(function () {
+            openModal();
+        })
+        //绑定保存按钮的事件
+        $("#btnSave").click(function () {
+            saveStudent();
+        })
+    })
+    var type = "添加";
+    //保存学生的方法（添加学生/修改学生）
+    function saveStudent() {
+        //先验证再保存
+        var studentNo = $("#StudentNo").val();
+        if (studentNo == null || studentNo == "" || studentNo == undefined) {
+            $("#StudentNo").next().html("学号不能为空");
+            return;
+        }
+        $("#StudentNo").next().html("");
+        //验证手机号码不能重复的问题
+        var validateStudentNo="";
+        if(type=="修改"){
+            validateStudentNo=studentNo;
+        }
+        $.ajax({
+            //  url: '/Student/SelectStudent?pageIndex=' + pageIndex,//请求服务器的地址
+            url: '/student/validatePhone',//请求服务器的地址
+            //参数名与动作方法中的形参名一致，后面的为参数值
+            data: {
+                phone: $("[name='Phone']").val(),
+                studentNo: validateStudentNo
+            },//客户端传入到服务端的数据
+            type: 'post',//请求服务器的方式post/get
+            datatype: 'text',//服务器返回的数据格式：json/text/html
+            async: false,//是否异步请求true/false
+            success: function (data) {//请求成功之后的回调函数
+                if (data > 0) {
+                    $("#Phone").next().html("手机号码重复");
+                    return;
+                } else {//验证通过，则添加
+                    $("#Phone").next().html("");
+                    var url = "";//请求服务器的地址
+                    if (type == "添加") {
+                        url = "/Student/InsertStudent";
+                    } else {
+                        url = "/Student/UpdateStudent";
+                    }
+                    $.ajax({
+                        //  url: '/Student/SelectStudent?pageIndex=' + pageIndex,//请求服务器的地址
+                        url: url,//请求服务器的地址
+                        //参数名与动作方法中的形参名一致，后面的为参数值
+                        data: $("#form1").serialize(),//客户端传入到服务端的数据
+                        type: 'post',//请求服务器的方式post/get
+                        datatype: 'text',//服务器返回的数据格式：json/text/html
+                        async: false,//是否异步请求true/false
+                        success: function (data) {//请求成功之后的回调函数
+                            var result = parseInt(data);
+                            alert(result);
+                        },
+                        error: function () {
+                            alert("系统错误");
+                        }
+                    })
+                }
+            },
+            error: function () {
+                alert("系统错误");
+            }
+        })
+       
+       
+    }
+    //打开编辑学生的模态框,同时传递学号
+    function openModal(studentNo) {
+        //如果学号为空，则为添加学生的操作
+        if (studentNo == null || studentNo == "" || studentNo == undefined) {
+            $(".modal-title").html("添加学生");
+            //清空表单数据
+            $("#form1 :text").val("");
+            type = "添加";
+        } else {
+            $(".modal-title").html("修改学生");
+            //根据学号查询该学生的基本信息，并且加载到模态上
+            $("[name='StudentNo']").val(studentNo);
+            SelectOneStudent(studentNo);
+            type = "修改";
+        }
+        $("#myModal").modal();
+    }
+    //根据学号查询当前学生基本信息
+    function SelectOneStudent(studentNo) {
+        $.ajax({
+            //  url: '/Student/SelectStudent?pageIndex=' + pageIndex,//请求服务器的地址
+            url: '/Student/SelectOneStudent?rand=' + Math.random(),//请求服务器的地址
+            data: { studentNo: studentNo },//客户端传入到服务端的数据
+            type: 'post',//请求服务器的方式post/get
+            datatype: 'json',//服务器返回的数据格式：json/text/html
+            async: true,//是否异步请求true/false
+            success: function (stu) {//请求成功之后的回调函数
+                $("[name='StudentName']").val(stu.StudentName);
+                $("[name='GradeId']").val(stu.GradeId);
+                $("[name='LoginPwd']").val(stu.LoginPwd);
+                $("[name='Phone']").val(stu.Phone);
+                $("[name='StudentNo']").val(stu.StudentNo);
+                $("[name='Address']").val(stu.Address);
+                $("[name='Email']").val(stu.Email);
+                $("[name='BornDate']").val(stu.BornDate);
+                //单选按钮的判断
+                if (stu.Sex == "男") {
+                    $("[name='Sex']")[0].checked=true;
+                } else {
+                    $("[name='Sex']")[1].checked = true;
+                }
+            },
+            error: function () {
+                alert("系统错误");
+            }
+        })
+    }
+    //绑定年级的下拉框的方法
+    function BindGrade() {
+        $.ajax({
+            //  url: '/Student/SelectStudent?pageIndex=' + pageIndex,//请求服务器的地址
+            url: '/Student/SelectAllGrade?rand=' + Math.random(),//请求服务器的地址
+            type: 'post',//请求服务器的方式post/get
+            datatype: 'json',//服务器返回的数据格式：json/text/html
+            async: true,//是否异步请求true/false
+            success: function (gList) {//请求成功之后的回调函数
+                //gList年级集合
+                for (var i = 0; i < gList.length; i++) {
+                    $("#GradeId").append('<option value="' + gList[i].GradeId + '">' + gList[i].GradeName + '</option>');
+                }
+            },
+            error: function () {
+                alert("系统错误");
+            }
+        })
+    }
+  
+</script>
+<h2>学生列表</h2>
+<input type="button" value="添加学生" id="btnAdd" />
+<a href="/Student/Add">添加学生</a>
+<table>
+    <tr>
+    <th>学号</th>
+    <th>姓名</th>
+    <th>登录密码</th>
+    <th>手机号码</th>
+    <th>操作</th>
+    </tr>
+    <tbody id="tbStudent">
+        
+    </tbody>
+</table>
+<div id="divPage"></div>
+@*添加修改的模态框*@
+<div id="myModal" tabindex=-1 data-show="true"
+     data-backdrop="static" class="modal fade bs-example-modal-xs">
+    <div class="modal-dialog modal-xs">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">添加学生</h4>
+            </div>
+            <div class="media-body">
+                <div class="container">
+                    <form id="form1" action="#">
+                        学号：<input type="text" name="StudentNo" id="StudentNo" />
+                        <span style="color:red"></span><br/>
+                        姓名：<input type="text" name="StudentName" /><br />
+                        密码：<input type="text" name="LoginPwd" /><br />
+                        手机号码：<input type="text" name="Phone" id="Phone" />
+                        <span style="color:red"></span><br />
+                        性别：<input type="radio" name="Sex" value="男" checked="checked" />男
+                        <input type="radio" name="Sex" value="女" />女<br/>
+                        地址：<input type="text" name="Address" /><br />
+                        所属年级：
+                        <select id="GradeId" name="GradeId">
+                            @*<option value="1">S1</option>*@
+                        </select>
+                        @*<input type="text" name="GradeId" />*@
+                        <br />
+                        邮箱：<input type="text" name="Email" /><br />
+                        出生年月：<input type="text" name="BornDate" /><br />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSave" class="btn btn-primary">保存</button>
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

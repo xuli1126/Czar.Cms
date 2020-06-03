@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<script type="text/javascript">
+    var studentNo = GetQuery("studentNo");
+    var name = GetQuery("studentName");
+    $(function () {
+        if (studentNo == null || studentNo == "" || studentNo == undefined) {
+            $("#MyTitle").html("添加学生");
+        } else {
+            $("#MyTitle").html("修改学生");
+        }
+    })
+    function save() {
+
+    }
+</script>
+<h2 id="MyTitle">添加和编辑学生信息的页面</h2>

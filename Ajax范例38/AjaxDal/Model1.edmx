@@ -1,0 +1,717 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SchoolModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginPwd" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Grade">
+          <Key>
+            <PropertyRef Name="GradeId" />
+          </Key>
+          <Property Name="GradeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GradeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Result">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SubjectId" Type="int" Nullable="false" />
+          <Property Name="StudentResult" Type="int" />
+          <Property Name="ExamDate" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentNo" />
+          </Key>
+          <Property Name="StudentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginPwd" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="StudentName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sex" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="GradeId" Type="int" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="BornDate" Type="datetime" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FileUrl" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="SubjectId" />
+          </Key>
+          <Property Name="SubjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ClassHour" Type="int" Nullable="false" />
+          <Property Name="GradeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“School.dbo.ResultView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="ResultView">
+          <Key>
+            <PropertyRef Name="学号" />
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="科目名称" />
+          </Key>
+          <Property Name="学号" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="姓名" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="成绩" Type="int" />
+          <Property Name="科目名称" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“School.dbo.ResultView1”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="ResultView1">
+          <Key>
+            <PropertyRef Name="学号" />
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="科目名称" />
+          </Key>
+          <Property Name="学号" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="姓名" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="成绩" Type="int" />
+          <Property Name="科目名称" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“School.dbo.StudentResultView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="StudentResultView">
+          <Key>
+            <PropertyRef Name="所属年级" />
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="学号" />
+            <PropertyRef Name="科目" />
+          </Key>
+          <Property Name="所属年级" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="姓名" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="学号" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="成绩" Type="int" />
+          <Property Name="科目" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“School.dbo.stuInfo”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="stuInfo">
+          <Key>
+            <PropertyRef Name="学号" />
+          </Key>
+          <Property Name="学号" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="平均分" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“School.dbo.viewStudent”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="viewStudent">
+          <Key>
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="年级" />
+            <PropertyRef Name="电话号码" />
+          </Key>
+          <Property Name="姓名" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="年级" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="电话号码" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Result_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentNo" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="StudentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="SubjectId" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_Grade">
+          <End Role="Grade" Type="Self.Grade" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grade">
+              <PropertyRef Name="GradeId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="GradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subject_Grade">
+          <End Role="Grade" Type="Self.Grade" Multiplicity="1" />
+          <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grade">
+              <PropertyRef Name="GradeId" />
+            </Principal>
+            <Dependent Role="Subject">
+              <PropertyRef Name="GradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="insertGrade" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="showresult" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="jigexian" Type="int" Mode="In" />
+          <Parameter Name="message" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="showStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="jgScore" Type="int" Mode="In" />
+          <Parameter Name="scoreInfo" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="gradeName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="zhuanzhang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="zhuanchu" Type="varchar" Mode="In" />
+          <Parameter Name="zhuanru" Type="varchar" Mode="In" />
+          <Parameter Name="jine" Type="money" Mode="In" />
+        </Function>
+        <EntityContainer Name="SchoolModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Grade" EntityType="Self.Grade" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Result" EntityType="Self.Result" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResultView" EntityType="Self.ResultView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ResultView].[学号] AS [学号], 
+    [ResultView].[姓名] AS [姓名], 
+    [ResultView].[成绩] AS [成绩], 
+    [ResultView].[科目名称] AS [科目名称]
+    FROM [dbo].[ResultView] AS [ResultView]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ResultView1" EntityType="Self.ResultView1" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ResultView1].[学号] AS [学号], 
+    [ResultView1].[姓名] AS [姓名], 
+    [ResultView1].[成绩] AS [成绩], 
+    [ResultView1].[科目名称] AS [科目名称]
+    FROM [dbo].[ResultView1] AS [ResultView1]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="StudentResultView" EntityType="Self.StudentResultView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [StudentResultView].[所属年级] AS [所属年级], 
+    [StudentResultView].[姓名] AS [姓名], 
+    [StudentResultView].[学号] AS [学号], 
+    [StudentResultView].[成绩] AS [成绩], 
+    [StudentResultView].[科目] AS [科目]
+    FROM [dbo].[StudentResultView] AS [StudentResultView]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="stuInfo" EntityType="Self.stuInfo" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [stuInfo].[学号] AS [学号], 
+    [stuInfo].[平均分] AS [平均分]
+    FROM [dbo].[stuInfo] AS [stuInfo]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="viewStudent" EntityType="Self.viewStudent" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [viewStudent].[姓名] AS [姓名], 
+    [viewStudent].[年级] AS [年级], 
+    [viewStudent].[电话号码] AS [电话号码]
+    FROM [dbo].[viewStudent] AS [viewStudent]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Result_Student" Association="Self.FK_Result_Student">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Result" EntitySet="Result" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Subject" Association="Self.FK_Result_Subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="Result" EntitySet="Result" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_Grade" Association="Self.FK_Student_Grade">
+            <End Role="Grade" EntitySet="Grade" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subject_Grade" Association="Self.FK_Subject_Grade">
+            <End Role="Grade" EntitySet="Grade" />
+            <End Role="Subject" EntitySet="Subject" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SchoolModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoginPwd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Grade">
+          <Key>
+            <PropertyRef Name="GradeId" />
+          </Key>
+          <Property Name="GradeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GradeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Student_Grade" FromRole="Grade" ToRole="Student" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK_Subject_Grade" FromRole="Grade" ToRole="Subject" />
+        </EntityType>
+        <EntityType Name="Result">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SubjectId" Type="Int32" Nullable="false" />
+          <Property Name="StudentResult" Type="Int32" />
+          <Property Name="ExamDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Result_Student" FromRole="Result" ToRole="Student" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK_Result_Subject" FromRole="Result" ToRole="Subject" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StudentNo" />
+          </Key>
+          <Property Name="StudentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoginPwd" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StudentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sex" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="GradeId" Type="Int32" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BornDate" Type="DateTime" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Grade" Relationship="Self.FK_Student_Grade" FromRole="Student" ToRole="Grade" />
+          <NavigationProperty Name="Result" Relationship="Self.FK_Result_Student" FromRole="Student" ToRole="Result" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="SubjectId" />
+          </Key>
+          <Property Name="SubjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClassHour" Type="Int32" Nullable="false" />
+          <Property Name="GradeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Grade" Relationship="Self.FK_Subject_Grade" FromRole="Subject" ToRole="Grade" />
+          <NavigationProperty Name="Result" Relationship="Self.FK_Result_Subject" FromRole="Subject" ToRole="Result" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="ResultView">
+          <Key>
+            <PropertyRef Name="学号" />
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="科目名称" />
+          </Key>
+          <Property Name="学号" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="姓名" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="成绩" Type="Int32" />
+          <Property Name="科目名称" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResultView1">
+          <Key>
+            <PropertyRef Name="学号" />
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="科目名称" />
+          </Key>
+          <Property Name="学号" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="姓名" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="成绩" Type="Int32" />
+          <Property Name="科目名称" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StudentResultView">
+          <Key>
+            <PropertyRef Name="所属年级" />
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="学号" />
+            <PropertyRef Name="科目" />
+          </Key>
+          <Property Name="所属年级" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="姓名" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="学号" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="成绩" Type="Int32" />
+          <Property Name="科目" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="stuInfo">
+          <Key>
+            <PropertyRef Name="学号" />
+          </Key>
+          <Property Name="学号" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="平均分" Type="Int32" />
+        </EntityType>
+        <EntityType Name="viewStudent">
+          <Key>
+            <PropertyRef Name="姓名" />
+            <PropertyRef Name="年级" />
+            <PropertyRef Name="电话号码" />
+          </Key>
+          <Property Name="姓名" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="年级" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="电话号码" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Student_Grade">
+          <End Role="Grade" Type="Self.Grade" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grade">
+              <PropertyRef Name="GradeId" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="GradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subject_Grade">
+          <End Role="Grade" Type="Self.Grade" Multiplicity="1" />
+          <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grade">
+              <PropertyRef Name="GradeId" />
+            </Principal>
+            <Dependent Role="Subject">
+              <PropertyRef Name="GradeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StudentNo" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="StudentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="SubjectId" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SchoolEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admin" EntityType="Self.Admin" />
+          <EntitySet Name="Grade" EntityType="Self.Grade" />
+          <EntitySet Name="Result" EntityType="Self.Result" />
+          <EntitySet Name="Student" EntityType="Self.Student" />
+          <EntitySet Name="Subject" EntityType="Self.Subject" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="ResultView" EntityType="Self.ResultView" />
+          <EntitySet Name="ResultView1" EntityType="Self.ResultView1" />
+          <EntitySet Name="StudentResultView" EntityType="Self.StudentResultView" />
+          <EntitySet Name="stuInfo" EntityType="Self.stuInfo" />
+          <EntitySet Name="viewStudent" EntityType="Self.viewStudent" />
+          <AssociationSet Name="FK_Student_Grade" Association="Self.FK_Student_Grade">
+            <End Role="Grade" EntitySet="Grade" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subject_Grade" Association="Self.FK_Subject_Grade">
+            <End Role="Grade" EntitySet="Grade" />
+            <End Role="Subject" EntitySet="Subject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Student" Association="Self.FK_Result_Student">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Result" EntitySet="Result" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Subject" Association="Self.FK_Result_Subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="Result" EntitySet="Result" />
+          </AssociationSet>
+          <FunctionImport Name="insertGrade" />
+          <FunctionImport Name="showresult">
+            <Parameter Name="jigexian" Mode="In" Type="Int32" />
+            <Parameter Name="message" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="showStudent">
+            <Parameter Name="jgScore" Mode="In" Type="Int32" />
+            <Parameter Name="scoreInfo" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SchoolModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SchoolModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="test">
+            <Parameter Name="gradeName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="zhuanzhang">
+            <Parameter Name="zhuanchu" Mode="In" Type="String" />
+            <Parameter Name="zhuanru" Mode="In" Type="String" />
+            <Parameter Name="jine" Mode="In" Type="Decimal" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SchoolModelStoreContainer" CdmEntityContainer="SchoolEntities">
+          <EntitySetMapping Name="Admin">
+            <EntityTypeMapping TypeName="SchoolModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="LoginPwd" ColumnName="LoginPwd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Grade">
+            <EntityTypeMapping TypeName="SchoolModel.Grade">
+              <MappingFragment StoreEntitySet="Grade">
+                <ScalarProperty Name="GradeId" ColumnName="GradeId" />
+                <ScalarProperty Name="GradeName" ColumnName="GradeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Result">
+            <EntityTypeMapping TypeName="SchoolModel.Result">
+              <MappingFragment StoreEntitySet="Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StudentNo" ColumnName="StudentNo" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="StudentResult" ColumnName="StudentResult" />
+                <ScalarProperty Name="ExamDate" ColumnName="ExamDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Student">
+            <EntityTypeMapping TypeName="SchoolModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="StudentNo" ColumnName="StudentNo" />
+                <ScalarProperty Name="LoginPwd" ColumnName="LoginPwd" />
+                <ScalarProperty Name="StudentName" ColumnName="StudentName" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="GradeId" ColumnName="GradeId" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="BornDate" ColumnName="BornDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FileUrl" ColumnName="FileUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subject">
+            <EntityTypeMapping TypeName="SchoolModel.Subject">
+              <MappingFragment StoreEntitySet="Subject">
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+                <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
+                <ScalarProperty Name="ClassHour" ColumnName="ClassHour" />
+                <ScalarProperty Name="GradeId" ColumnName="GradeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="SchoolModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResultView">
+            <EntityTypeMapping TypeName="SchoolModel.ResultView">
+              <MappingFragment StoreEntitySet="ResultView">
+                <ScalarProperty Name="学号" ColumnName="学号" />
+                <ScalarProperty Name="姓名" ColumnName="姓名" />
+                <ScalarProperty Name="成绩" ColumnName="成绩" />
+                <ScalarProperty Name="科目名称" ColumnName="科目名称" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResultView1">
+            <EntityTypeMapping TypeName="SchoolModel.ResultView1">
+              <MappingFragment StoreEntitySet="ResultView1">
+                <ScalarProperty Name="学号" ColumnName="学号" />
+                <ScalarProperty Name="姓名" ColumnName="姓名" />
+                <ScalarProperty Name="成绩" ColumnName="成绩" />
+                <ScalarProperty Name="科目名称" ColumnName="科目名称" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentResultView">
+            <EntityTypeMapping TypeName="SchoolModel.StudentResultView">
+              <MappingFragment StoreEntitySet="StudentResultView">
+                <ScalarProperty Name="所属年级" ColumnName="所属年级" />
+                <ScalarProperty Name="姓名" ColumnName="姓名" />
+                <ScalarProperty Name="学号" ColumnName="学号" />
+                <ScalarProperty Name="成绩" ColumnName="成绩" />
+                <ScalarProperty Name="科目" ColumnName="科目" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="stuInfo">
+            <EntityTypeMapping TypeName="SchoolModel.stuInfo">
+              <MappingFragment StoreEntitySet="stuInfo">
+                <ScalarProperty Name="学号" ColumnName="学号" />
+                <ScalarProperty Name="平均分" ColumnName="平均分" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="viewStudent">
+            <EntityTypeMapping TypeName="SchoolModel.viewStudent">
+              <MappingFragment StoreEntitySet="viewStudent">
+                <ScalarProperty Name="姓名" ColumnName="姓名" />
+                <ScalarProperty Name="年级" ColumnName="年级" />
+                <ScalarProperty Name="电话号码" ColumnName="电话号码" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="insertGrade" FunctionName="SchoolModel.Store.insertGrade" />
+          <FunctionImportMapping FunctionImportName="showresult" FunctionName="SchoolModel.Store.showresult" />
+          <FunctionImportMapping FunctionImportName="showStudent" FunctionName="SchoolModel.Store.showStudent" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="SchoolModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="SchoolModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="SchoolModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SchoolModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SchoolModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SchoolModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SchoolModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SchoolModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="SchoolModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="test" FunctionName="SchoolModel.Store.test" />
+          <FunctionImportMapping FunctionImportName="zhuanzhang" FunctionName="SchoolModel.Store.zhuanzhang" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
